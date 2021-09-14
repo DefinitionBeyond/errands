@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.dev.dao.mapper.LabelMapper">
+
+    <resultMap id="labelMap" type="com.campus.dev.model.LabelDO">
+        <result property="id" column="id"/>
+        <result property="labelName" column="label_name"/>
+        <result property="type" column="type"/>
+        <result property="uid" column="uid"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <sql id="Table">
+        label
+    </sql>
+
+    <sql id="Base_Column">
+        `id`,`label_name`,`type`,`uid`,`created_at`,`updated_at`
+    </sql>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+
+        insert into
+        <include refid="Table"/>
+        (`label_name`,`type`,`uid`)
+
+        values (#{entity.labelName},#{entity.type},#{entity.uid})
+
+    </insert>
+
+
+    <insert id="bulkInsert" keyProperty="id" useGeneratedKeys="true">
+
+        insert into
+        <include refid="Table"/>
+        (`label_name`,`type`,`uid`)
+
+        values
+        <foreach collection="names" separator="," item="entity">
+            (#{entity.labelName},#{entity.type},#{entity.uid})
+        </foreach>
+    </insert>
+
+    <select id="listIdByName" resultType="java.lang.Long">
+        select id from
+        <include refid="Table"/>
+        where label_name in <foreach collection="names" close=")" open="(" separator="," item="item">
+        #{item}
+    </foreach>
+
+    </select>
+
+
+    <select id="bulkGetNameById" resultType="java.lang.String">
+        select name from
+        <include refid="Table"/>
+        where id in
+         <foreach collection="ids" close=")" open="(" separator="," item="item">
+            #{item}
+        </foreach>
+
+    </select>
+
+
+    <select id="findByTypeAndName" resultMap="labelMap">
+        select <include refid="Base_Column"/> from
+        <include refid="Table"/>
+        where label_name = #{name} and `type` = #{type}
+    </select>
+
+    <select id="listIdByNames" resultMap="labelMap">
+        select <include refid="Base_Column"/> from
+        <include refid="Table"/>
+        where `type` = #{type} and
+        label_name  in
+        <foreach collection="names" separator="," item="name" open="(" close=")">
+            #{name}
+        </foreach>
+    </select>
+
+    <select id="list" resultMap="labelMap">
+        select <include refid="Base_Column"/> from
+        <include refid="Table"/>
+        where `type` = #{search.type}
+        <if test="search.uid != 0 and search.uid != null">
+            and uid = #{search.uid}
+        </if>
+        <if test="search.label != 0 and search.label != null">
+            and label_name like concat('%',#{search.label},'%')
+        </if>
+
+        order by updatedAt desc
+
+
+    </select>
+
+</mapper>

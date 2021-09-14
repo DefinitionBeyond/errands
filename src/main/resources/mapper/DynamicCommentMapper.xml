@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.dev.dao.mapper.DynamicCommentMapper">
+
+<resultMap id="dcommentMap" type="com.campus.dev.model.DynamicCommentDO">
+    <result property="id" column="id"/>
+    <result property="uid" column="uid"/>
+    <result property="dynamicId" column="dynamic_id"/>
+    <result property="content" column="content"/>
+    <result property="replyId" column="reply_id"/>
+</resultMap>
+
+<sql id="Table">
+        dynamic_comment
+    </sql>
+
+<sql id="Base_Column">
+        `id`,`uid`,`dynamic_id`,`content`,`reply_id`
+    </sql>
+
+<insert id="insert" keyProperty="id" useGeneratedKeys="true">
+
+    insert into
+    <include refid="Table"/>
+    (`uid`,`dynamic_id`,`content`,`reply_id`)
+
+    values (#{entity.uid},#{entity.dynamicId},#{entity.content},#{entity.replyId})
+
+</insert>
+
+<select id="getByDynamicId" resultMap="dcommentMap">
+    select <include refid="Base_Column"/>
+    from <include refid="Table"/>
+    where dynamic_id = #{dynamicId}
+</select>
+
+<delete id="deleteByDynamicId">
+    delete from <include refid="Table"/> where dynamic_id = #{dynamicId}
+
+</delete>
+
+
+<delete id="deleteById">
+    delete from <include refid="Table"/> where id = #{id}
+</delete>
+
+<select id="getById" resultMap="dcommentMap">
+    select <include refid="Base_Column"/>
+    from <include refid="Table"/>
+    where id = #{id}
+</select>
+</mapper>

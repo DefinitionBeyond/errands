@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.dev.dao.mapper.DynamicInfoMapper">
+
+    <resultMap id="dinfoMap" type="com.campus.dev.model.DynamicInfoDO">
+        <result property="id" column="id"/>
+        <result property="infoPicture" column="info_picture"/>
+        <result property="dynamicId" column="dynamic_id"/>
+    </resultMap>
+
+    <sql id="Table">
+        dynamic_like
+    </sql>
+
+    <sql id="Base_Column">
+        `id`,`info_picture`,`dynamic_id`
+    </sql>
+
+    <insert id="bulkInsert" keyProperty="id" useGeneratedKeys="true">
+
+        insert into
+        <include refid="Table"/>
+        (`dynamic_id`,`info_picture`)
+
+        values
+        <foreach collection="list" item="entity" separator=",">
+        (#{entity.dynamicId},#{entity.info_picture})
+        </foreach>
+    </insert>
+
+    <delete id="deleteByDynamicId">
+        delete from <include refid="Table"/> where dynamic_id = #{dynamicId}
+    </delete>
+
+
+    <select id="getByDynamicId" resultMap="dinfoMap">
+        select <include refid="Base_Column"/> from <include refid="Table"/>
+        where dynamic_id = #{dynamicId}
+    </select>
+
+    <select id="getByDynamicIds" resultMap="dinfoMap">
+        select <include refid="Base_Column"/> from <include refid="Table"/>
+        where dynamic_id in
+        <foreach collection="dynamicIds" item="dynamicId" close=")" open="(" separator=",">
+        #{dynamicId}
+        </foreach>
+    </select>
+
+</mapper>

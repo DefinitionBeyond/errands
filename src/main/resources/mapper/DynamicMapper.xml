@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.dev.dao.mapper.DynamicMapper">
+
+    <resultMap id="dynamicMap" type="com.campus.dev.model.DynamicDO">
+        <result property="id" column="id"/>
+        <result property="uid" column="uid"/>
+        <result property="status" column="status"/>
+        <result property="labels" column="labels" typeHandler="com.campus.dev.handle.LongListTypeHandler"/>
+        <result property="publishStatus" column="publish_status"/>
+        <result property="content" column="content"/>
+        <result property="commentNum" column="comment_num"/>
+        <result property="likeNum" column="like_num"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    <sql id="Table">
+        label
+    </sql>
+
+    <sql id="Base_Column">
+        `id`,`uid`,`status`,`labels`,`publish_status`,`content`,`comment_num`,`like_num`,`created_at`,`updated_at`
+    </sql>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+
+        insert into
+        <include refid="Table"/>
+        (`uid`,`status`,`labels`,`publish_status`,`content`,`comment_num`,`like_num`)
+
+        values (#{entity.uid},#{entity.status},#{entity.labels,typeHandler = com.campus.dev.handle.LongListTypeHandler},#{entity.publishStatus},#{entity.content},#{entity.commentNum},#{entity.likeNum})
+
+    </insert>
+
+
+    <delete id="delete">
+        delete from <include refid="Table"/> where id = #{dynamicId}
+    </delete>
+
+    <update id="updatePublishStatus">
+        update  set publish_status = 1  <include refid="Table"/> where id = #{dynamicId}
+
+    </update>
+
+    <select id="getLeastEditByUser" resultMap="dynamicMap">
+        select <include refid="Base_Column"/> from <include refid="Table"/> where uid = #{uid} order by updated_at desc limit 1
+    </select>
+
+    <update id="updateLikeNum">
+        update  set like_num = like_num + #{op} <include refid="Table"/> where id = #{dynamicId}
+
+    </update>
+
+    <update id="updateCommentNum">
+        update  set comment_num = comment_num + #{op}  <include refid="Table"/> where id = #{dynamicId}
+
+    </update>
+
+    <select id="getById" resultMap="dynamicMap">
+        select <include refid="Base_Column"/> from <include refid="Table"/> where id = #{dynamicId}
+
+    </select>
+
+</mapper>

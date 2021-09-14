@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.dev.dao.mapper.UserMapper">
+
+    <resultMap id="userMap" type="com.campus.dev.model.UserDO">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="username" column="username"/>
+        <result property="openId" column="open_id"/>
+        <result property="age" column="age"/>
+        <result property="sex" column="sex"/>
+        <result property="phone" column="phone"/>
+        <result property="school" column="school"/>
+        <result property="avatarUrl" column="avatar_url"/>
+        <result property="idCardPosUrl" column="id_card_pos_url"/>
+        <result property="idCardNegUrl" column="id_card_neg_url"/>
+        <result property="stuCardUrl" column="stu_card_url"/>
+        <result property="status" column="status"/>
+        <result property="level" column="level"/>
+        <result property="active" column="active"/>
+        <result property="desc" column="desc"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <sql id="Table">
+        user
+    </sql>
+
+    <sql id="Base_Column">
+        `id`,`name`,`username`,`open_id`,`age`,`sex`,`phone`,`school`,`avatar_url`,`id_card_pos_url`,`id_card_neg_url`,
+        `stu_card_url`,`status`,`active`,`level`,`desc`,`created_at`,`updated_at`
+    </sql>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+
+    insert into
+    <include refid="Table"/>
+    (`name`,`username`,`open_id`,`age`,`sex`,`phone`,`school`,`avatar_url`,
+    `id_card_pos_url`,`id_card_neg_url`,
+        `stu_card_url`,`status`,`active`,`level`,`desc`
+        )
+        values (
+        #{entity.name},#{entity.username},#{entity.openId},#{entity.age},#{entity.sex},#{entity.phone},#{entity.school},#{entity.idCardPosUrl},#{entity.idCardNegUrl},
+        #{entity.stuCardUrl},#{entity.status},#{entity.active},#{entity.level},#{entity.desc}
+        )
+
+    </insert>
+
+    <update id="identify">
+        update <include refid="Table"/>
+        set id_card_pos_url= #{entity.idCardPosUrl},
+        id_card_neg_url = #{entity.idCardNegUrl},
+        stu_card_url = #{entity.stuCardUrl},
+        `status` = #{entity.status}
+        where id = #{entity.uid}
+
+    </update>
+
+    <update id="editDTO">
+        update <include refid="Table"/>
+        set username= #{entity.username},
+        age = #{entity.age},
+        sex = #{entity.sex},
+        `phone` = #{entity.phone},
+        `avatar_url` = #{entity.avatarUrl},
+        `desc` = #{entity.desc},
+        where id = #{entity.id}
+
+    </update>
+
+    <update id="active">
+        update <include refid="Table"/>
+        set active= #{entity.active}
+        where id in
+         <foreach collection="uids" item="item" separator="," open="(" close=")" >
+         #{item}
+         </foreach>
+    </update>
+
+    <select id="getById" resultMap="userMap">
+        select <include refid="Base_Column"/> from <include refid="Table"/>
+
+        where id = #{uid}
+    </select>
+
+
+    <select id="listByIds" resultMap="userMap">
+        select <include refid="Base_Column"/> from <include refid="Table"/>
+
+        where id in
+        <foreach collection="ids" item="item" separator="," open="(" close=")" >
+            #{item}
+        </foreach>
+    </select>
+
+
+    <select id="findByOpenId" resultMap="userMap">
+        select <include refid="Base_Column"/> from <include refid="Table"/>
+        where open_id = #{openId}
+    </select>
+
+</mapper>

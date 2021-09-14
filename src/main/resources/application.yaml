@@ -1,0 +1,41 @@
+spring:
+  barren:
+    appName: sopdef
+    version: 1.0
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/errands?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&allowMultiQueries=true
+    username: root
+    password: root
+  datasource-pool:
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    filters: stat,wall
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    useGlobalDataSourceStat: true
+
+
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+  config-location: classpath:/mybatis-config.xml
+  type-aliases-package: com.campus.dev.model
+
+base:
+  pic:
+    dir: /data/pic
+  weixin:
+    appid: wx0a6fd5bf28c175ea
+    appSecret: 271e9da8f9f214600e8001e883dca855
+    session-url: https://api.weixin.qq.com/sns/jscode2session
