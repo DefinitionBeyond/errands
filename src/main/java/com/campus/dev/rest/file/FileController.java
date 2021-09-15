@@ -23,12 +23,15 @@ public class FileController {
     private HttpRequestOptions httpRequestOptions;
 
     @PostMapping("/upload/{type}")
+    @ResponseBody
     public ResultDTO<FileDO> upload(@PathVariable("type")int type, @RequestParam("file")MultipartFile file) throws Exception {
-        return new ResultDTO<>(fileService.upload(type, file, httpRequestOptions));
+        FileDO data = fileService.upload(type, file, httpRequestOptions);
+        return new ResultDTO<FileDO>(data);
 
     }
 
     @PostMapping("/uploads/{type}")
+    @ResponseBody
     public ResultDTO<List<FileDO>> bulkUpload(@RequestParam("files")MultipartFile[] files, @PathVariable("type")int type) throws Exception {
         if(files.length > 9)throw new Exception("文件数量超出限制");
         return new ResultDTO<>(fileService.bulkUpload(files, type, httpRequestOptions));
@@ -36,11 +39,13 @@ public class FileController {
 
 
     @GetMapping("list")
+    @ResponseBody
     public ResultDTO<List<FileDO>> list(@RequestParam("type")int type){
         return new ResultDTO<>(fileService.list(type));
     }
 
     @PostMapping("/delete/{id}")
+    @ResponseBody
     public ResultDTO<Boolean> deleteById(@PathVariable("id")int id){
         return new ResultDTO<>(fileService.deleteById(id));
     }

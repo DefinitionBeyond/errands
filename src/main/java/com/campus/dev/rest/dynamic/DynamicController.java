@@ -23,59 +23,69 @@ public class DynamicController {
     private DynamicService dynamicService;
 
     @PostMapping("/_create")
+    @ResponseBody
     public ResultDTO<Object> create(@RequestBody DynamicCreateDTO dynamicDTO){
         dynamicService.create(dynamicDTO, false);
         return new ResultDTO(null);
     }
 
     @PostMapping("/publish/{dynamicId}")
+    @ResponseBody
     public ResultDTO<Object> publish(@PathVariable("dynamicId")long dynamicId){
         dynamicService.publish(dynamicId);
         return new ResultDTO(null);
     }
 
     @PostMapping("/_create_and_publish")
+    @ResponseBody
     public ResultDTO<Object> createAndPublish(@RequestBody DynamicCreateDTO dynamicDTO){
         dynamicService.create(dynamicDTO, true);
         return new ResultDTO(null);
     }
 
     @PostMapping("/_delete/{dynamicId}")
+    @ResponseBody
     public ResultDTO<Object> delete(@PathVariable("dynamicId")long dynamicId){
         dynamicService.delete(dynamicId);
         return new ResultDTO(null);
     }
 
     @GetMapping("_least_edit/{uid}")
+    @ResponseBody
     public DynamicCreateDTO getLeastInfo(@PathVariable("uid")long uid){
         return dynamicService.getLeastInfoByUser(uid);
     }
 
     @PostMapping("_like")
+    @ResponseBody
     public ResultDTO<Object> like(@RequestBody LikeDTO request) throws Exception {
         dynamicService.like(request);
         return new ResultDTO(null);
     }
 
     @PostMapping("_comment")
+    @ResponseBody
     public ResultDTO<Object> comment(@RequestBody CommentDTO request) throws Exception {
         dynamicService.comment(request);
         return new ResultDTO(null);
     }
 
     @PostMapping("_del_comment")
+    @ResponseBody
     public ResultDTO<Object> delComment(@RequestBody CommentDTO request) throws BizException {
         dynamicService.delComment(request);
         return new ResultDTO(null);
     }
 
     @PostMapping("_cancel_like")
+    @ResponseBody
     public ResultDTO<Object> cancelLike(LikeDTO request){
         dynamicService.cancelLike(request);
         return new ResultDTO(null);
     }
 
     @GetMapping("_detail/{dynamicId}")
+    @ResponseBody
     public ResultDTO<DynamicInfoDTO> info(@PathVariable("dynamicId")long dynamicId) {
         return new ResultDTO(dynamicService.info(dynamicId));
     }

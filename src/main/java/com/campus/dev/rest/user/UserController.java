@@ -44,6 +44,7 @@ public class UserController {
     }
 
     @PostMapping("/active")
+    @ResponseBody
     public ResultDTO<Object> active(@RequestBody ActiveUserDTO request) throws Exception {
         userService.active(request);
         return new ResultDTO(200,null);
@@ -51,16 +52,19 @@ public class UserController {
     }
 
     @PostMapping("/login_code")
+    @ResponseBody
     public ResultDTO<UserDO> loginByCode(@RequestBody LoginDTO login) throws Exception {
         return new ResultDTO(userService.loginByCode(login));
     }
 
     @PostMapping("/login")
+    @ResponseBody
     public ResultDTO<UserDO> login(@RequestBody LoginDTO login) throws Exception {
         return new ResultDTO(userService.login(login));
     }
 
     @GetMapping("/getCode/{jsCode}")
+    @ResponseBody
     public ResultDTO<Code2SessionDTO> getWinXinJson(@PathVariable("jsCode") String jsCode) throws Exception {
 
         return new ResultDTO(userService.getWinXinJson(jsCode));

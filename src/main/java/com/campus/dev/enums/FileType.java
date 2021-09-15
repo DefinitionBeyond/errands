@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 @Getter
 @AllArgsConstructor
 public enum FileType {
+    SYSTEM(0,"sys","系统预制"),
     AVATAR(1,"avatar","头像"),
     DYNAMIC(2, "dynamic","动态"),
     ID_CARD_POS(3, "id_card_pos","身份证正面"),
