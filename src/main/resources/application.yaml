@@ -1,6 +1,6 @@
 spring:
   barren:
-    appName: sopdef
+    appName: errands
     version: 1.0
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
@@ -34,7 +34,7 @@ mybatis:
 
 base:
   pic:
-    dir: /Users/a1/workspace/code/errands/pic
+    dir: /data/pic
   weixin:
     appid: wx0a6fd5bf28c175ea
     appSecret: 271e9da8f9f214600e8001e883dca855

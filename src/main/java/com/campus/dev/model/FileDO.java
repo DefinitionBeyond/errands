@@ -17,6 +17,10 @@ public class FileDO{
 
     private long creator;
 
+    private String orgFilename;
+
+    private String uri;
+
     private int type;
 
     private Date createdAt  = new Date();

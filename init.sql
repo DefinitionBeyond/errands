@@ -68,12 +68,13 @@ create table file(
                      id bigint not null AUTO_INCREMENT,
                      name varchar(128) not null,
                      creator bigint not null default 0,
+                     `org_filename` varchar(128) default '',
                      type tinyint(1) default 0,
+                     `uri` varchar(255) default '',
                      created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间' ,
                      updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                      primary key (id)
 );
-
 
 create table label(
                       id bigint not null AUTO_INCREMENT,

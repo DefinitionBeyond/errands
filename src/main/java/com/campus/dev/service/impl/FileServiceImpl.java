@@ -11,15 +11,12 @@ import com.campus.dev.util.MD5GeneratorUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -51,16 +48,18 @@ public class FileServiceImpl implements FileService {
 
     private FileDO writeFile(MultipartFile file, int type, HttpRequestOptions httpRequestOptions) throws Exception {
         String orgFileName = file.getOriginalFilename();
-        String newFIleName = MD5GeneratorUtil.getMd5Utf8(orgFileName, UUID.randomUUID().toString());
+        String newFIleName = MD5GeneratorUtil.getMd5Utf8(orgFileName + String.valueOf(type) , UUID.randomUUID().toString());
         String childDir = FileType.getPathByType(type);
 
-        File dest = new File(baseDir +"/"+ childDir + "/" + newFIleName);
+        File dest = new File(baseDir + File.separator + childDir + File.separator + newFIleName);
 
         file.transferTo(dest);
 
         return FileDO.builder()
                 .creator(httpRequestOptions.getUserId())
                 .name(newFIleName)
+                .orgFilename(orgFileName)
+                .uri(childDir + "/" + newFIleName)
                 .type(type)
                 .build();
     }

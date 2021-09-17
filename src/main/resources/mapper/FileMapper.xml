@@ -8,6 +8,8 @@
         <result property="name" column="name"/>
         <result property="creator" column="creator"/>
         <result property="type" column="type"/>
+        <result property="orgFilename" column="org_filename"/>
+        <result property="uri" column="uri"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
@@ -17,16 +19,16 @@
     </sql>
 
     <sql id="Base_Column">
-        `id`,`name`,`creator`,`type`,`created_at`,`updated_at`
+        `id`,`name`,`creator`,`type`,`org_filename`,`uri`,`created_at`,`updated_at`
     </sql>
 
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
 
         insert into
         <include refid="Table"/>
-        (`name`,`creator`,`type`)
+        (`name`,`creator`,`org_filename`,`uri`,`type`)
 
-        values (#{entity.name},#{entity.creator},#{entity.type})
+        values (#{entity.name},#{entity.creator},#{entity.orgFilename},#{entity.uri},#{entity.type})
 
     </insert>
 
@@ -34,11 +36,11 @@
 
         insert into
         <include refid="Table"/>
-        (`name`,`creator`,`type`,`created_at`,`updated_at`)
+        (`name`,`creator`,`type`,`org_filename`,`uri`)
 
         values
         <foreach collection="list" item="entity" separator=",">
-           (#{entity.name},#{entity.creator},#{entity.type},#{entity.createdAt},#{entity.updatedAt})
+           (#{entity.name},#{entity.creator},#{entity.type},#{entity.orgFilename},#{entity.uri})
         </foreach>
     </insert>
 
