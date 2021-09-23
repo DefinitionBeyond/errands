@@ -1,5 +1,6 @@
 package com.campus.dev.service;
 
+import com.campus.dev.bean.BadException;
 import com.campus.dev.bean.BizException;
 import com.campus.dev.dto.request.ActiveUserDTO;
 import com.campus.dev.dto.request.LoginDTO;
@@ -32,4 +33,8 @@ public interface UserService {
     void deatail();
 
     UserDO loginByCode(LoginDTO login) throws Exception;
+
+    UserDO loginByEncryptedData(LoginDTO login);
+
+    Object sendMessage(String phone) throws Exception;
 }

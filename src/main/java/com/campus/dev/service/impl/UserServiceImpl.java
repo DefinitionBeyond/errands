@@ -4,17 +4,21 @@ import cn.hutool.http.HttpUtil;
 import com.campus.dev.bean.BadException;
 import com.campus.dev.bean.BizException;
 import com.campus.dev.bean.TransactionalForAll;
+import com.campus.dev.cache.UserIdentifyCodeManage;
 import com.campus.dev.constant.WeiXinPostParamConstant;
 import com.campus.dev.dao.mapper.UserMapper;
 import com.campus.dev.dto.request.*;
 import com.campus.dev.dto.response.Code2SessionDTO;
 import com.campus.dev.model.UserDO;
 import com.campus.dev.service.UserService;
+import com.campus.dev.util.EncryptedDataUtil;
+import com.campus.dev.util.SendMessageUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,8 +36,17 @@ public class UserServiceImpl implements UserService {
     @Value("${base.weixin.session-url}")
     public String SESSION_URL;
 
+    @Value("${base.weixin.default.avatar-url}")
+    public String DEFAULT_AVA;
+
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private SendMessageUtil sendMessageUtil;
+
+    @Autowired
+    private UserIdentifyCodeManage userIdentifyCodeManage;
 
     @TransactionalForAll
     @Override
@@ -59,15 +72,32 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @TransactionalForAll
     @Override
     public UserDO login(LoginDTO login) throws Exception {
-        if(login.getPhone().isEmpty()){
-            throw new Exception("");
+        if(!StringUtils.hasText(login.getPhone()) || !StringUtils.hasText(login.getIdentifyCode())){
+            throw new BadException("手机号或者验证码缺失");
         }
 
-        List<UserDO> userDOList = userMapper.login(login.getPhone());
+        String code = userIdentifyCodeManage.getUserIdentifyCode(login.getPhone());
+        if(!code.equals(login.getIdentifyCode()))throw new BadException("无效的验证码");
 
-        return CollectionUtils.isEmpty(userDOList)?null:userDOList.get(0);
+
+
+        UserDO userDO = userMapper.findByPhone(login.getPhone());
+
+        if(null != userDO) return userDO;
+
+
+        UserDO user = UserDO.builder()
+                .avatarUrl(DEFAULT_AVA)
+                .openId(login.getOpenId())
+                .phone(login.getPhone())
+                .username(login.getPhone())
+                .build();
+        userMapper.insert(user);
+
+        return user;
     }
 
     @Override
@@ -162,17 +192,58 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDO loginByCode(LoginDTO login) throws Exception {
+    public UserDO loginByCode(LoginDTO login) throws BadException, Exception {
         if(login.getCode().isEmpty())throw new BadException("code param not found");
 
         Code2SessionDTO winXinJson = this.getWinXinJson(login.getCode());
         String openid = winXinJson.getOpenid();
+
+        if(!StringUtils.hasText(openid)){
+            throw new BadException(winXinJson.getErrmsg());
+        }
+
         UserDO loginUserInfo = userMapper.findByOpenId(openid);
 
         if (loginUserInfo == null){
             throw new BadException("User not register");
         }
         return loginUserInfo;
+    }
+
+    @TransactionalForAll
+    @Override
+    public UserDO loginByEncryptedData(LoginDTO login) {
+        WeChatEncryptedDataDTO userInfo = EncryptedDataUtil.getUserInfo(login.getEncryptedData(), login.getSessionKey(), login.getIv());
+        String phone = login.getPhone();
+        UserDO byPhone = userMapper.findByPhone(phone);
+        if(null != byPhone)return byPhone;
+
+        UserDO user = UserDO.builder()
+                .avatarUrl(userInfo.getAvatarUrl())
+                .sex(userInfo.getGender().equals("man")?1:0)
+                .openId(userInfo.getOpenId())
+                .phone(login.getPhone())
+                .username(userInfo.getNickName())
+                .build();
+
+        userMapper.insert(user);
+
+        return user;
+    }
+
+    @Override
+    public Object sendMessage(String phone) throws BizException {
+
+        String code = userIdentifyCodeManage.getUserIdentifyCode(phone);
+        if(StringUtils.hasText(code)){
+            throw new BizException(402, "验证码短信已发送，勿重复发送");
+        }
+        try {
+            sendMessageUtil.sendMsgByTxPlatform(phone);
+        }catch (Exception e){
+            throw new BadException(e.getMessage());
+        }
+        return null;
     }
 
 

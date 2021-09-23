@@ -14,4 +14,8 @@ public class LoginDTO {
     private String phone;
     private String openId;
     private String code;
+    private String identifyCode;
+    private String encryptedData;
+    private String sessionKey;
+    private String iv;
 }

@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/errands?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&useLegacyDatetimeCode=false&allowMultiQueries=true
     username: root
-    password: root123
+    password: root
   datasource-pool:
     initialSize: 5
     minIdle: 5
@@ -32,10 +32,25 @@ mybatis:
   config-location: classpath:/mybatis-config.xml
   type-aliases-package: com.campus.dev.model
 
+
 base:
   pic:
     dir: /data/pic
   weixin:
+    default:
+      avatar-url: http://127.0.0.1/xxxx
     appid: wx0a6fd5bf28c175ea
     appSecret: 271e9da8f9f214600e8001e883dca855
     session-url: https://api.weixin.qq.com/sns/jscode2session
+tecent:
+  send-message:
+    local:
+      cache:
+        expire:
+          minutes: 5
+        max:
+          size: 1000
+    appid: 1231
+    appKey: adq
+    smsSign: 小饭卡
+    templateId: 123

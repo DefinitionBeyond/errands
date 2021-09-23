@@ -22,7 +22,7 @@ public class EditDTO{
 
     private String school;
 
-    private long avatarUrl;
+    private String avatarUrl;
 
     private String desc;
 }

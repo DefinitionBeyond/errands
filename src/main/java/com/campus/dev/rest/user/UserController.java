@@ -9,6 +9,7 @@ import com.campus.dev.dto.request.WechatLoginDTO;
 import com.campus.dev.dto.response.Code2SessionDTO;
 import com.campus.dev.model.UserDO;
 import com.campus.dev.service.UserService;
+import com.campus.dev.util.SendMessageUtil;
 import com.campus.dev.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -53,14 +54,25 @@ public class UserController {
 
     @PostMapping("/login_code")
     @ResponseBody
-    public ResultDTO<UserDO> loginByCode(@RequestBody LoginDTO login) throws Exception {
+    public ResultDTO loginByCode(@RequestBody LoginDTO login) throws Exception {
         return new ResultDTO(userService.loginByCode(login));
     }
 
-    @PostMapping("/login")
+    @PostMapping("/login_phone")
     @ResponseBody
     public ResultDTO<UserDO> login(@RequestBody LoginDTO login) throws Exception {
         return new ResultDTO(userService.login(login));
+    }
+
+    @PostMapping("/send_identify_code")
+    public ResultDTO<Object> sendMessageByPhone(@RequestBody LoginDTO login) throws Exception {
+        return new ResultDTO(userService.sendMessage(login.getPhone()));
+    }
+
+    @PostMapping("/login_encryptedData")
+    @ResponseBody
+    public ResultDTO<UserDO> loginByEncryptedData(@RequestBody LoginDTO login) throws Exception {
+        return new ResultDTO(userService.loginByEncryptedData(login));
     }
 
     @GetMapping("/getCode/{jsCode}")

@@ -25,7 +25,7 @@ public class UserDO {
 
     private String school;
 
-    private long avatarUrl;
+    private String avatarUrl;
 
     private long idCardPosUrl;
 

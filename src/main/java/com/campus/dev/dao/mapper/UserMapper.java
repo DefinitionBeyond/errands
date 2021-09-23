@@ -34,4 +34,6 @@ public interface UserMapper {
     void identify(@Param("entity")IdentifyDTO identifyDTO);
 
     UserDO findByOpenId(@Param("openId")String openId);
+
+    UserDO findByPhone(@Param("phone")String phone);
 }
