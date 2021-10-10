@@ -102,6 +102,10 @@
     </select>
 
 
+    <select id="findById" resultMap="userMap">
+        select <include refid="Base_Column"/> from <include refid="Table"/>
+        where id = #{id}
+    </select>
 
     <select id="findByPhone" resultMap="userMap">
         select <include refid="Base_Column"/> from <include refid="Table"/>

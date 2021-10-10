@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.dev.dao.mapper.SmallMealCardJoinDetailMapper">
+
+    <resultMap id="smallMealCardJoinDetailMapper" type="com.campus.dev.model.SmallMealCardJoinDetailDO">
+        <result property="id" column="id"/>
+        <result property="smallMealCardId" column="small_meal_card_id"/>
+        <result property="participant" column="participant"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+
+    <sql id="Table">
+        small_meal_card_join_detail
+    </sql>
+
+    <sql id="Base_Column">
+        `id`,`small_meal_card_id`,`participant`,`created_at`,`updated_at`
+    </sql>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+
+        insert into
+        <include refid="Table"/>
+        (`small_meal_card_id`,`participant`)
+
+        values (#{smallMealCardId},#{participant})
+
+    </insert>
+
+    <select id="findBySmallMealCardIdAndParticipant" resultMap="smallMealCardJoinDetailMapper">
+        select <include refid="Base_Column"/>
+        from <include refid="Table"/>
+        where 1=1
+        and small_meal_card_id = #{smallMealCardId}
+        and participant = #{participant}
+    </select>
+
+    <delete id="deleteBySmallMealCardId">
+            delete from <include refid="Table"/>
+            where small_meal_card_id = #{smallMealCardId}
+    </delete>
+</mapper>

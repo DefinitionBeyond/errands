@@ -64,6 +64,36 @@ create table dynamic_like(
                              primary key (id)
 );
 
+
+
+create table small_meal_card(
+    id bigint not null AUTO_INCREMENT,
+    title varchar(128) not null ,
+    people_num int default 0,
+    high_light varchar(128) not null default '' comment '亮点',
+    detail_introduce varchar(255) not null default '' comment '详细介绍',
+    explain varchar(255) not null default '' comment '活动声明',
+    deadline datetime default '',
+    plan_start_time datetime default '',
+    plan_end_time datetime default '',
+    sign_deadline datetime default '',
+    labels json default null ,
+    status tinyint not null default 0,
+    creator bigint not null default 0 comment '创建人',
+    detail_location varchar(255) default '',
+    created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间' ,
+    updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+);
+
+create table small_meal_card_join_detail(
+    id bigint not null AUTO_INCREMENT,
+    small_meal_card_id bigint not null ,
+    participant bigint not null ,
+    created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间' ,
+    updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+);
+
+
 create table file(
                      id bigint not null AUTO_INCREMENT,
                      name varchar(128) not null,

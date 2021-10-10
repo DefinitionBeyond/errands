@@ -36,4 +36,6 @@ public interface UserMapper {
     UserDO findByOpenId(@Param("openId")String openId);
 
     UserDO findByPhone(@Param("phone")String phone);
+
+    UserDO findById(@Param("id")long id);
 }

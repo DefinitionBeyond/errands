@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.dev.dao.mapper.SmallMealCardMapper">
+
+    <resultMap id="smallMealCardMapper" type="com.campus.dev.model.SmallMealCardDO">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="peopleNum" column="people_num"/>
+        <result property="highLight" column="high_light"/>
+        <result property="detailIntroduce" column="detail_introduce"/>
+        <result property="explain" column="explain"/>
+        <result property="deadline" column="deadline"/>
+        <result property="planStartTime" column="plan_start_time"/>
+        <result property="planEndTime" column="plan_end_time"/>
+        <result property="signDeadLine" column="sign_deadline"/>
+        <result property="status" column="status"/>
+        <result property="creator" column="creator"/>
+        <result property="labels" column="labels" typeHandler="com.campus.dev.handle.LongListTypeHandler"/>
+        <result property="detailLocation" column="detail_location"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <sql id="Table">
+        small_meal_card
+    </sql>
+
+    <sql id="Base_Column">
+        `id`,`title`,`people_num`,`high_light`,`labels`
+        `detail_introduce`,`explain`,`deadline`,`plan_start_time`,
+        `plan_end_time`,`sign_deadline`,`status`,`creator`,`detail_location`,
+        `created_at`,`updated_at`
+    </sql>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+
+        insert into
+        <include refid="Table"/>
+        (`title`,`people_num`,`high_light`,`labels`
+        `detail_introduce`,`explain`,`deadline`,`plan_start_time`,
+        `plan_end_time`,`sign_deadline`,`status`,`creator`,`detail_location`)
+
+        values (#{entity.title},#{entity.peopleNum},#{entity.highLight},#{entity.labels,typeHandler = com.campus.dev.handle.LongListTypeHandler},
+        #{entity.detailIntroduce},#{entity.explain},#{entity.deadline},#{entity.planStartTime},
+        #{entity.planEndTime},#{entity.signDeadLine},#{entity.status},#{entity.creator},#{entity.detailLocation})
+
+    </insert>
+
+    <select id="list" resultMap="smallMealCardMapper">
+        select <include refid="Base_Column"/>
+        from <include refid="Table"/>
+        where 1=1
+        <if test="label!=null and label != '' ">
+            and label = #{label}
+        </if>
+        <if test="title!=null and title != '' ">
+            and title like CONCAT('%', #{title}, '%')
+        </if>
+        <if test="location!=null and location != '' ">
+            and location like CONCAT('%', #{location}, '%')
+        </if>
+        <if test="planStartTime!=null and planStartTime != '' ">
+            <![CDATA[ AND plan_start_time >= #{planStartTime,jdbcType=DATE} ]]>
+        </if>
+        <if test="planEndTime!=null and planEndTime != '' ">
+            <![CDATA[ AND plan_end_time >= #{planEndTime,jdbcType=DATE} ]]>
+        </if>
+
+        order by updated_at desc
+    </select>
+
+    <select id="findByIdAndTime" resultMap="smallMealCardMapper">
+        select <include refid="Base_Column"/>
+        from <include refid="Table"/>
+        where 1=1
+        and id = #{id}
+        and <![CDATA[ AND deadline >= #{currentTime,jdbcType=DATE} ]]>
+    </select>
+
+    <select id="findById" resultMap="smallMealCardMapper">
+        select <include refid="Base_Column"/>
+        from <include refid="Table"/>
+        where 1=1
+        and id = #{id}
+    </select>
+
+    <update id="addParticipantNum" >
+        update from <include refid="Table"/>
+        set people_num = people_num+1
+        where id = #{id}
+
+    </update>
+
+
+    <delete id="deleteById">
+        delete from <include refid="Table"/>
+        where id = #{id}
+    </delete>
+</mapper>
+

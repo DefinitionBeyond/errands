@@ -21,13 +21,13 @@ public class SendMessageUtil {
 
     public void sendMsgByTxPlatform(String phone) throws Exception {
 
-        SmsSingleSender sSender = new SmsSingleSender(sMsProperties.appId, sMsProperties.appKey);
+        SmsSingleSender sSender = new SmsSingleSender(Integer.valueOf(sMsProperties.appId), sMsProperties.appKey);
         String code = GeneratorSecretUtil.getSixValidationCode();
         String[] params = {code, "2"};
         //第一个参数0表示普通短信,1表示营销短信
         SmsSingleSenderResult result = sSender.sendWithParam("86",
                 phone,
-                sMsProperties.templateId,
+                Integer.valueOf(sMsProperties.templateId),
                  params, sMsProperties.smsSign,"","");
 
         if (result.result != 0) {

@@ -4,7 +4,7 @@ package com.campus.dev.bean;
 import lombok.Getter;
 
 @Getter
-public class BizException extends Exception{
+public class BizException extends RuntimeException{
 
     private int code;
     private String messge;

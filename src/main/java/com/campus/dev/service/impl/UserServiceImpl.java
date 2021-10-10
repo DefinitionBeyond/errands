@@ -5,6 +5,7 @@ import com.campus.dev.bean.BadException;
 import com.campus.dev.bean.BizException;
 import com.campus.dev.bean.TransactionalForAll;
 import com.campus.dev.cache.UserIdentifyCodeManage;
+import com.campus.dev.cache.UserSessionKeyCache;
 import com.campus.dev.constant.WeiXinPostParamConstant;
 import com.campus.dev.dao.mapper.UserMapper;
 import com.campus.dev.dto.request.*;
@@ -47,6 +48,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserIdentifyCodeManage userIdentifyCodeManage;
+
+    @Autowired
+    private UserSessionKeyCache userSessionKeyCache;
 
     @TransactionalForAll
     @Override
@@ -204,16 +208,35 @@ public class UserServiceImpl implements UserService {
 
         UserDO loginUserInfo = userMapper.findByOpenId(openid);
 
+        //将用户的openId和SessionKey 缓存
+        userSessionKeyCache.updateSessionKey(winXinJson.getOpenid(), winXinJson.getSession_key());
+
         if (loginUserInfo == null){
-            throw new BadException("User not register");
+//            throw new BadException("User not register");
+            loginUserInfo = new UserDO();
+            loginUserInfo.setOpenId(openid);
         }
-        return loginUserInfo;
+
+       return loginUserInfo;
     }
 
     @TransactionalForAll
     @Override
     public UserDO loginByEncryptedData(LoginDTO login) {
-        WeChatEncryptedDataDTO userInfo = EncryptedDataUtil.getUserInfo(login.getEncryptedData(), login.getSessionKey(), login.getIv());
+
+        if(!StringUtils.hasText(login.getOpenId())){
+            throw new BadException("Miss param with openid");
+        }
+
+        String openId = login.getOpenId();
+
+        String sessionKey = userSessionKeyCache.getSessionKey(openId);
+
+        if(!StringUtils.hasText(sessionKey)){
+            throw new BadException("Session key has expire");
+        }
+
+        WeChatEncryptedDataDTO userInfo = EncryptedDataUtil.getUserInfo(login.getEncryptedData(), sessionKey, login.getIv());
         String phone = login.getPhone();
         UserDO byPhone = userMapper.findByPhone(phone);
         if(null != byPhone)return byPhone;
