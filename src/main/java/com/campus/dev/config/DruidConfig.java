@@ -1,6 +1,7 @@
 package com.campus.dev.config;
 
 import com.alibaba.druid.filter.Filter;
+import com.alibaba.druid.filter.logging.Slf4jLogFilter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.wall.WallConfig;
 import com.alibaba.druid.wall.WallFilter;
@@ -52,6 +53,11 @@ public class DruidConfig {
         dataSource.setPoolPreparedStatements(this.druidPoolProperty.poolPreparedStatements);
         dataSource.setMaxPoolPreparedStatementPerConnectionSize(this.druidPoolProperty.maxPoolPreparedStatementPerConnectionSize);
         dataSource.setProxyFilters(getWallFilters());
+        Slf4jLogFilter logFilter = new Slf4jLogFilter();
+        logFilter.setStatementExecutableSqlLogEnable(true);
+        logFilter.setStatementLogEnabled(true);
+        List<Filter> filterList = Arrays.asList(logFilter);
+        dataSource.setProxyFilters(filterList);
         try {
             dataSource.setFilters(this.druidPoolProperty.filters);
         } catch (SQLException e) {

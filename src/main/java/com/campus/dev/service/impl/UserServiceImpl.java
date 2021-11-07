@@ -6,10 +6,9 @@ import com.campus.dev.bean.BizException;
 import com.campus.dev.bean.TransactionalForAll;
 import com.campus.dev.cache.UserIdentifyCodeManage;
 import com.campus.dev.cache.UserSessionKeyCache;
-import com.campus.dev.constant.WeiXinPostParamConstant;
 import com.campus.dev.dao.mapper.UserMapper;
-import com.campus.dev.dto.request.*;
-import com.campus.dev.dto.response.Code2SessionDTO;
+import com.campus.dev.rest.user.request.*;
+import com.campus.dev.rest.user.response.Code2SessionDTO;
 import com.campus.dev.model.UserDO;
 import com.campus.dev.service.UserService;
 import com.campus.dev.util.EncryptedDataUtil;
@@ -18,12 +17,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 public class UserServiceImpl implements UserService {

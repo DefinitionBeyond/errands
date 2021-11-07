@@ -2,7 +2,7 @@ package com.campus.dev.rest.label;
 
 import com.campus.dev.bean.HttpRequestOptions;
 import com.campus.dev.dto.ResultDTO;
-import com.campus.dev.dto.request.LabelSearchDTO;
+import com.campus.dev.rest.label.request.LabelSearchDTO;
 import com.campus.dev.enums.LabelType;
 import com.campus.dev.model.LabelDO;
 import com.campus.dev.service.LabelService;
@@ -38,10 +38,10 @@ public class LabelManageController {
 
     @GetMapping("list")
     @ResponseBody
-    public ResultDTO<List<LabelDO>> list(@RequestParam("type")Integer type,
-                              @RequestParam("label") String label,
-                              @RequestParam("page")int page,
-                              @RequestParam("size")int size) throws Exception {
+    public ResultDTO<List<LabelDO>> list(@RequestParam(value = "type",required = false)Integer type,
+                              @RequestParam(value = "label",required = false) String label,
+                              @RequestParam(value = "page",required = false)int page,
+                              @RequestParam(value = "size",required = false)int size) throws Exception {
         return new ResultDTO(labelService.list(convert(label,type)));
     }
 
@@ -52,7 +52,7 @@ public class LabelManageController {
             labelSearchDTO.setUid(httpRequestOptions.getUserId());
         }
 
-        if(!label.isEmpty())labelSearchDTO.setLabel(label);
+//        if(!label.isEmpty())labelSearchDTO.setLabel(label);
 
         labelSearchDTO.setType(type);
         return labelSearchDTO;

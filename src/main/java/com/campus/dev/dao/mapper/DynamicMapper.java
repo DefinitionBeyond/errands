@@ -1,9 +1,8 @@
 package com.campus.dev.dao.mapper;
 
 
-import com.campus.dev.dto.request.DynamicSearchDTO;
+import com.campus.dev.rest.dynamic.request.DynamicSearchDTO;
 import com.campus.dev.model.DynamicDO;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

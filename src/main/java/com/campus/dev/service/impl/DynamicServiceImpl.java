@@ -4,15 +4,14 @@ import com.campus.dev.bean.BadException;
 import com.campus.dev.bean.BizException;
 import com.campus.dev.bean.TransactionalForAll;
 import com.campus.dev.dao.mapper.*;
-import com.campus.dev.dto.request.*;
-import com.campus.dev.dto.response.DynamicCommentDTO;
-import com.campus.dev.dto.response.DynamicInfoDTO;
+import com.campus.dev.rest.dynamic.request.*;
+import com.campus.dev.rest.dynamic.response.DynamicCommentDTO;
+import com.campus.dev.rest.dynamic.response.DynamicInfoDTO;
 import com.campus.dev.model.*;
 import com.campus.dev.service.DynamicService;
 import com.campus.dev.service.LabelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -47,7 +46,7 @@ public class DynamicServiceImpl implements DynamicService {
 
     @TransactionalForAll
     @Override
-    public void create(DynamicCreateDTO dynamicDTO,  boolean isPublish) {
+    public void create(DynamicCreateDTO dynamicDTO, boolean isPublish) {
 
         List<Long> labels = labelMapper.listIdByName(dynamicDTO.getLabels());
 

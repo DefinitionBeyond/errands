@@ -15,6 +15,7 @@
         <setting name="useGeneratedKeys" value="true"/>
         <!--打印日志到终端-->
         <setting name="logImpl" value="SLF4J"/>
+<!--        <setting name="logPrefix" value="MybatisSql2Logback."/>-->
     </settings>
 
 </configuration>

@@ -1,6 +1,6 @@
 package com.campus.dev.dao.mapper;
 
-import com.campus.dev.dto.request.CommentDTO;
+import com.campus.dev.rest.dynamic.request.CommentDTO;
 import com.campus.dev.model.DynamicCommentDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

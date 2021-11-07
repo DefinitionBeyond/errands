@@ -11,11 +11,12 @@ import org.springframework.util.StringUtils;
 import javax.annotation.PostConstruct;
 import java.util.concurrent.TimeUnit;
 
-@Log4j2
+//@Log4j2
 @Component
 public class UserIdentifyCodeManage {
     //监听器，监听被淘汰的数据
-    private RemovalListener<String, String> listener = removalNotification -> log.debug(removalNotification.getKey() + " is removed from local cache");
+    private RemovalListener<String, String> listener = removalNotification -> {};
+//    log.debug(removalNotification.getKey() + " is removed from local cache");
 
     @Value("${tecent.send-message.local.cache.max.size}")
     private Long maxSize;

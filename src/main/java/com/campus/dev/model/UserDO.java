@@ -39,6 +39,8 @@ public class UserDO {
 
     private int level;
 
+    private int isMerchant;
+
     private String desc;
 
     private Date createdAt;

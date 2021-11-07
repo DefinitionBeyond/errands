@@ -1,6 +1,6 @@
 package com.campus.dev.service;
 
-import com.campus.dev.dto.request.LabelSearchDTO;
+import com.campus.dev.rest.label.request.LabelSearchDTO;
 import com.campus.dev.model.LabelDO;
 
 import java.util.List;

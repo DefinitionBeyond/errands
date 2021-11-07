@@ -1,6 +1,6 @@
 package com.campus.dev.dao.mapper;
 
-import com.campus.dev.dto.request.LabelSearchDTO;
+import com.campus.dev.rest.label.request.LabelSearchDTO;
 import com.campus.dev.model.LabelDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

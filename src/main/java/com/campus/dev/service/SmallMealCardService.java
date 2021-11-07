@@ -2,8 +2,8 @@ package com.campus.dev.service;
 
 import com.campus.dev.bean.BizException;
 import com.campus.dev.dto.ResultListDTO;
-import com.campus.dev.dto.card.PublishSmallMealCardDTO;
-import com.campus.dev.dto.card.SmallMealCardDetailDTO;
+import com.campus.dev.rest.card.request.PublishSmallMealCardDTO;
+import com.campus.dev.rest.card.response.SmallMealCardDetailDTO;
 import com.campus.dev.model.SmallMealCardDO;
 
 import java.util.List;

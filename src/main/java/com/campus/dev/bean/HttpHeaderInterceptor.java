@@ -2,7 +2,6 @@ package com.campus.dev.bean;
 
 import com.campus.dev.dao.mapper.UserMapper;
 import com.campus.dev.model.UserDO;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +17,6 @@ public class HttpHeaderInterceptor implements Filter {
     @Autowired
     private UserMapper userMapper;
 
-    @SneakyThrows
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
@@ -39,9 +37,12 @@ public class HttpHeaderInterceptor implements Filter {
             throw new BadException("X-User-Id 不合法");
         }
 
+        UserContext.set(UserContext.CONTEXT_KEY_USER_ID, userId);
+
         UserDO userDO = userMapper.getById(userId);
 
-        if(userDO == null)throw new BizException(401,"该用户不存在系统");
+        if(userDO == null)throw new BadException("该用户不存在系统");
 
+        UserContext.set(UserContext.USER_INFO, userDO);
     }
 }

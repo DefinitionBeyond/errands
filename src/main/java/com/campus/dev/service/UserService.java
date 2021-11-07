@@ -1,12 +1,10 @@
 package com.campus.dev.service;
 
-import com.campus.dev.bean.BadException;
 import com.campus.dev.bean.BizException;
-import com.campus.dev.dto.request.ActiveUserDTO;
-import com.campus.dev.dto.request.LoginDTO;
-import com.campus.dev.dto.request.UserSearchDTO;
-import com.campus.dev.dto.request.WechatLoginDTO;
-import com.campus.dev.dto.response.Code2SessionDTO;
+import com.campus.dev.rest.user.request.ActiveUserDTO;
+import com.campus.dev.rest.user.request.LoginDTO;
+import com.campus.dev.rest.user.request.UserSearchDTO;
+import com.campus.dev.rest.user.response.Code2SessionDTO;
 import com.campus.dev.model.UserDO;
 
 import java.util.List;

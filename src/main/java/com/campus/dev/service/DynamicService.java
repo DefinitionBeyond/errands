@@ -1,12 +1,11 @@
 package com.campus.dev.service;
 
 import com.campus.dev.bean.BizException;
-import com.campus.dev.dto.request.CommentDTO;
-import com.campus.dev.dto.request.DynamicCreateDTO;
-import com.campus.dev.dto.request.DynamicListDTO;
-import com.campus.dev.dto.request.LikeDTO;
-import com.campus.dev.dto.response.DynamicInfoDTO;
-import com.campus.dev.dto.response.DynamicListResponseDTO;
+import com.campus.dev.rest.dynamic.request.CommentDTO;
+import com.campus.dev.rest.dynamic.request.DynamicCreateDTO;
+import com.campus.dev.rest.dynamic.request.DynamicListDTO;
+import com.campus.dev.rest.dynamic.request.LikeDTO;
+import com.campus.dev.rest.dynamic.response.DynamicInfoDTO;
 
 import java.util.List;
 

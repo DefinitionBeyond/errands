@@ -5,14 +5,13 @@ import com.campus.dev.bean.BizException;
 import com.campus.dev.bean.HttpRequestOptions;
 import com.campus.dev.bean.TransactionalForAll;
 import com.campus.dev.dao.mapper.LabelMapper;
-import com.campus.dev.dto.request.LabelSearchDTO;
+import com.campus.dev.rest.label.request.LabelSearchDTO;
 import com.campus.dev.enums.LabelType;
 import com.campus.dev.model.LabelDO;
 import com.campus.dev.service.LabelService;
 import com.campus.dev.util.StringRuleUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;

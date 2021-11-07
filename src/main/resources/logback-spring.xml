@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>PROJECT [%d{HH:mm:ss}] %-4relative [%thread] %-5level %logger{50} - %msg %n</pattern>
+        </encoder>
+    </appender>
+
+        <logger name="druid.sql.Statement" level="debug">
+        </logger>
+        <logger name="druid.sql.DataSource" level="debug">
+        </logger>
+        <logger name="druid.sql.Connection" level="debug">
+        </logger>
+        <logger name="druid.sql.ResultSet" level="debug">
+        </logger>
+
+<!--    <logger name="MybatisSql2Logback" level="DEBUG">-->
+<!--        <appender-ref ref="STDOUT" />-->
+<!--    </logger>-->
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>

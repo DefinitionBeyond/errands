@@ -3,7 +3,7 @@ package com.campus.dev.util;
 import java.io.UnsupportedEncodingException;
 import java.security.*;
 
-import com.campus.dev.dto.request.WeChatEncryptedDataDTO;
+import com.campus.dev.rest.user.request.WeChatEncryptedDataDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

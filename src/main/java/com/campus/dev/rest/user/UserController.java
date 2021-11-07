@@ -2,15 +2,12 @@ package com.campus.dev.rest.user;
 
 
 import com.campus.dev.dto.ResultDTO;
-import com.campus.dev.dto.request.ActiveUserDTO;
-import com.campus.dev.dto.request.LoginDTO;
-import com.campus.dev.dto.request.UserSearchDTO;
-import com.campus.dev.dto.request.WechatLoginDTO;
-import com.campus.dev.dto.response.Code2SessionDTO;
+import com.campus.dev.rest.user.request.ActiveUserDTO;
+import com.campus.dev.rest.user.request.LoginDTO;
+import com.campus.dev.rest.user.request.UserSearchDTO;
+import com.campus.dev.rest.user.response.Code2SessionDTO;
 import com.campus.dev.model.UserDO;
 import com.campus.dev.service.UserService;
-import com.campus.dev.util.SendMessageUtil;
-import com.campus.dev.util.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -84,22 +81,22 @@ public class UserController {
 
     @GetMapping("/list")
     @ResponseBody
-    public ResultDTO<List<UserDO>> list(@RequestParam(value = "id", required = false)long id,
+    public ResultDTO<List<UserDO>> list(@RequestParam(value = "id", required = false)Long id,
                              @RequestParam(value = "phone", required = false)String phone,
                              @RequestParam(value = "username", required = false)String username,
-                             @RequestParam(value = "status", required = false)int status,
-                             @RequestParam(value = "active", required = false)boolean active,
+                             @RequestParam(value = "status", required = false)Integer status,
+                             @RequestParam(value = "active", required = false)Boolean active,
                              @RequestParam(value = "school", required = false)String school,
-                             @RequestParam(value = "creatTimeStart", required = false)long creatTimeStart,
-                             @RequestParam(value = "creatTimeEnd", required = false)long creatTimeEnd
+                             @RequestParam(value = "creatTimeStart", required = false)Long creatTimeStart,
+                             @RequestParam(value = "creatTimeEnd", required = false)Long creatTimeEnd
                      ){
-        UserSearchDTO userSearchDTO = convertUserSearchDTO(id, phone, username, status, active, school, creatTimeStart, creatTimeEnd);
+//        UserSearchDTO userSearchDTO = convertUserSearchDTO(id, phone, username, status, active, school, creatTimeStart, creatTimeEnd);
 
-        return new ResultDTO<>(userService.list(userSearchDTO));
+        return new ResultDTO<>(userService.list(new UserSearchDTO()));
 
     }
 
-    private UserSearchDTO convertUserSearchDTO(long id, String phone, String username, int status, boolean active, String school, long creatTimeStart, long creatTimeEnd) {
+    private UserSearchDTO convertUserSearchDTO(Long id, String phone, String username, Integer status, Boolean active, String school, Long creatTimeStart, Long creatTimeEnd) {
         return UserSearchDTO.builder()
                 .id(id)
                 .phone(phone)
@@ -107,8 +104,8 @@ public class UserController {
                 .status(status)
                 .active(active)
                 .school(school)
-                .creatTimeStart(TimeUtils.formatStampYYMMDDHHMMSS(creatTimeStart))
-                .creatTimeEnd(TimeUtils.formatStampYYMMDDHHMMSS(creatTimeEnd))
+//                .creatTimeStart(TimeUtils.formatStampYYMMDDHHMMSS(creatTimeStart))
+//                .creatTimeEnd(TimeUtils.formatStampYYMMDDHHMMSS(creatTimeEnd))
                 .build();
 
     }

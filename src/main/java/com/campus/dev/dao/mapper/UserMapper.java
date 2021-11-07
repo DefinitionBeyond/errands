@@ -1,8 +1,8 @@
 package com.campus.dev.dao.mapper;
 
-import com.campus.dev.dto.request.EditDTO;
-import com.campus.dev.dto.request.IdentifyDTO;
-import com.campus.dev.dto.request.UserSearchDTO;
+import com.campus.dev.rest.user.request.EditDTO;
+import com.campus.dev.rest.user.request.IdentifyDTO;
+import com.campus.dev.rest.user.request.UserSearchDTO;
 import com.campus.dev.model.UserDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

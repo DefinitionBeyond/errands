@@ -3,11 +3,11 @@ package com.campus.dev.rest.dynamic;
 
 import com.campus.dev.bean.BizException;
 import com.campus.dev.dto.ResultDTO;
-import com.campus.dev.dto.request.CommentDTO;
-import com.campus.dev.dto.request.DynamicCreateDTO;
-import com.campus.dev.dto.request.DynamicListDTO;
-import com.campus.dev.dto.request.LikeDTO;
-import com.campus.dev.dto.response.DynamicInfoDTO;
+import com.campus.dev.rest.dynamic.request.CommentDTO;
+import com.campus.dev.rest.dynamic.request.DynamicCreateDTO;
+import com.campus.dev.rest.dynamic.request.DynamicListDTO;
+import com.campus.dev.rest.dynamic.request.LikeDTO;
+import com.campus.dev.rest.dynamic.response.DynamicInfoDTO;
 import com.campus.dev.service.DynamicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
