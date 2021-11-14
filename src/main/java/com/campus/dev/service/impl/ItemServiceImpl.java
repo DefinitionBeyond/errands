@@ -2,18 +2,24 @@ package com.campus.dev.service.impl;
 
 import com.campus.dev.bean.*;
 import com.campus.dev.dao.mapper.*;
+import com.campus.dev.dto.ResultListDTO;
 import com.campus.dev.model.*;
 import com.campus.dev.rest.item.request.CommentRequestDTO;
 import com.campus.dev.rest.item.request.DelCommentDTO;
 import com.campus.dev.rest.item.request.ItemDTO;
+import com.campus.dev.rest.item.request.UpdateItemDTO;
 import com.campus.dev.rest.item.response.ItemDetailDTO;
 import com.campus.dev.service.ItemService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -71,6 +77,16 @@ public class ItemServiceImpl implements ItemService {
                 .build();
 
         itemMapper.insert(itemDO);
+
+
+
+        if(!CollectionUtils.isEmpty(itemDTO.getInfoPictures())) {
+            long itemId = itemDO.getId();
+            List<ItemInfoDO> itemInfoDOS = itemDTO.getInfoPictures().stream().map(it -> new ItemInfoDO(itemId, it)).collect(Collectors.toList());
+
+
+            itemInfoMapper.bulkInsert(itemInfoDOS);
+        }
 
         return true;
     }
@@ -151,7 +167,7 @@ public class ItemServiceImpl implements ItemService {
                 .price(changeShowPrice(itemDO.getPrice()))
                 .build();
         if(!CollectionUtils.isEmpty(itemDO.getLabels())) {
-            List<String> labels = labelMapper.bulkGetNameById(itemDO.getLabels());
+            List<LabelDO> labels = labelMapper.listByIds(itemDO.getLabels());
             itemDetailDTO.setLabels(labels);
         }
 
@@ -160,7 +176,87 @@ public class ItemServiceImpl implements ItemService {
         if(!CollectionUtils.isEmpty(itemInfoDOS)) {
             itemDetailDTO.setInfoPictures(itemInfoDOS.stream().map(ItemInfoDO::getInfoPicture).collect(Collectors.toList()));
         }
+
+        ItemLikeDO byUidAndItemid = itemLikeMapper.findByUidAndItemid(UserContext.getUserId(), itemDO.getId());
+
+        if(null != byUidAndItemid){
+            itemDetailDTO.setLike(true);
+        }
+
         return itemDetailDTO;
+    }
+
+    @Override
+    public void edit(UpdateItemDTO request) {
+        checkMerchant();
+
+        MerchantDO merchantDO = merchantMapper.findByCreator(UserContext.getUserId());
+
+        if(null == merchantDO){
+            log.warn("不是商户，发出发布商品请求，userId{}", UserContext.getUserId());
+            throw new BadException("商户不存在");
+        }
+
+        ItemDO itemDO = checkItemExist(request.getItemId());
+
+        if(StringUtils.hasText(request.getDesc())){
+            itemDO.setDesc(request.getDesc());
+        }
+
+        if(StringUtils.hasText(request.getPrice())){
+            itemDO.setPrice(changePrice(request.getPrice()));
+        }
+
+        if(request.getInStock()>0){
+            itemDO.setInStock(request.getInStock());
+        }
+
+        if(request.getShowPictureUrl()>0 && request.getShowPictureUrl()!= itemDO.getShowPictureUrl()){
+            itemDO.setShowPictureUrl(request.getShowPictureUrl());
+        }
+
+        itemMapper.update(itemDO);
+
+    }
+
+    @Override
+    public ResultListDTO<List<ItemDetailDTO>> list(Map<String, Object> searchMap) {
+        if(CollectionUtils.isEmpty(searchMap))return null;
+
+        Page<ItemDO> startPage = PageHelper.startPage((Integer) searchMap.getOrDefault("page", 1), (Integer) searchMap.getOrDefault("size", 20));
+        List<ItemDO> result = itemMapper.list(searchMap);
+
+        List<Long> itemIds = result.stream().map(ItemDO::getId).collect(Collectors.toList());
+
+        List<ItemLikeDO> byUidAndItemids = itemLikeMapper.findByUidAndItemids(UserContext.getUserId(), itemIds);
+        List<Long> curUserLikeItem = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(byUidAndItemids)){
+            curUserLikeItem = byUidAndItemids.stream().map(ItemLikeDO::getId).collect(Collectors.toList());
+        }
+
+        Set<Long> labels = new HashSet<>();
+        result.forEach(it->labels.addAll(it.getLabels()));
+
+        Map<Long, LabelDO> labelMap = labelMapper.listByIds(labels.stream().collect(Collectors.toList()))
+                .stream()
+                .collect(Collectors.toMap(LabelDO::getId, Function.identity(),(v1, v2) -> v1));
+
+        return new ResultListDTO(result.stream().map(it->{
+            List<LabelDO> tempLabel = new ArrayList<>();
+            if(!CollectionUtils.isEmpty(it.getLabels())){
+                it.getLabels().forEach(l->{
+                    tempLabel.add(labelMap.get(l));
+                });
+            }
+            return ItemDetailDTO.builder()
+                    .desc(it.getDesc())
+                    .price(changeShowPrice(it.getPrice()))
+                    .inStock(it.getInStock())
+                    .likeNum(it.getLikeNum())
+                    .commentNum(it.getCommentNum())
+                    .labels(tempLabel)
+                    .build();
+        }).collect(Collectors.toList()),startPage.getTotal(),startPage.getPageNum());
     }
 
     private void checkMerchant() {

@@ -80,6 +80,15 @@
         </foreach>
     </select>
 
+    <select id="listByIds" resultMap="labelMap">
+        select <include refid="Base_Column"/> from
+        <include refid="Table"/>
+        where id in
+        <foreach collection="ids" separator="," item="id" open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+
     <select id="list" resultMap="labelMap">
         select <include refid="Base_Column"/> from
         <include refid="Table"/>

@@ -1,5 +1,6 @@
 package com.campus.dev.rest.item.response;
 
+import com.campus.dev.model.LabelDO;
 import lombok.*;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class ItemDetailDTO {
 
     private String price;
 
-    private List<String> labels;
+    private List<LabelDO> labels;
 
     private int inStock;
 
@@ -24,5 +25,7 @@ public class ItemDetailDTO {
     private long commentNum;
 
     private long likeNum;
+
+    private boolean isLike = false;
 
 }

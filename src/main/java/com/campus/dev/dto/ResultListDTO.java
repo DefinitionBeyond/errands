@@ -12,10 +12,12 @@ public class ResultListDTO<T> {
     private String message = "OK";
     private T data;
     private long total;
+    private long pageNum;
 
-    public ResultListDTO(T data, long total ){
+    public ResultListDTO(T data, long total,long pageNum ){
         this.data = data;
         this.total = total;
+        this.pageNum = pageNum;
     }
 
 }

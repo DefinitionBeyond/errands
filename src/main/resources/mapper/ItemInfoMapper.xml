@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.dev.dao.mapper.ItemInfoMapper">
+
+    <resultMap id="dInfoMap" type="com.campus.dev.model.ItemInfoDO">
+        <result property="id" column="id"/>
+        <result property="itemId" column="item_id"/>
+        <result property="infoPicture" column="info_picture"/>
+    </resultMap>
+
+    <sql id="Table">
+        item_info
+    </sql>
+
+    <sql id="Base_Column">
+        `id`,`item_id`,`info_picture`
+    </sql>
+
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+
+        insert into
+        <include refid="Table"/>
+        (`info_picture`,`item_id`)
+
+        values (#{entity.infoPicture},#{entity.itemId})
+
+    </insert>
+
+    <insert id="bulkInsert" keyProperty="id" useGeneratedKeys="true">
+
+        insert into
+        <include refid="Table"/>
+        (`info_picture`,`item_id`)
+
+        values
+        <foreach collection="list" separator="," item="entity">
+            (#{entity.infoPicture},#{entity.itemId})
+        </foreach>
+    </insert>
+
+    <select id="findByItemId" resultMap="dInfoMap">
+
+        select <include refid="Base_Column"/> from <include refid="Table"/>
+
+        where item_id = #{itemId}
+
+    </select>
+
+</mapper>

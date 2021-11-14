@@ -17,6 +17,8 @@ public interface LabelMapper {
 
     List<Long> listIdByName(@Param("names") List<String> names);
 
+    List<LabelDO> listByIds(@Param("ids")List<Long> ids);
+
     List<String> bulkGetNameById(@Param("ids")List<Long> ids);
 
     List<LabelDO> findByTypeAndName(@Param("type")int type, @Param("name")String label);

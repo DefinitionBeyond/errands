@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.dev.dao.mapper.ItemMapper">
+
+    <resultMap id="itemMapper" type="com.campus.dev.model.ItemDO">
+        <result property="id" column="id"/>
+        <result property="status" column="status"/>
+        <result property="desc" column="desc"/>
+        <result property="showPictureUrl" column="show_picture_url"/>
+        <result property="price" column="price"/>
+        <result property="merchantId" column="merchant_id"/>
+        <result property="labels" column="labels" typeHandler="com.campus.dev.handle.LongListTypeHandler"/>
+        <result property="inStock" column="in_stock"/>
+        <result property="commentNum" column="comment_num"/>
+        <result property="likeNum" column="like_num"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+
+    </resultMap>
+
+    <sql id="Table">
+        item
+    </sql>
+
+    <sql id="Base_Column">
+        `id`,`status`,`desc`,`show_picture_url`,`price`,`merchant_id`,`labels`,`in_stock`,`comment_num`,`like_num`,`created_at`,`updated_at`
+    </sql>
+
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+
+        insert into
+        <include refid="Table"/>
+        (`status`,`desc`,`show_picture_url`,`price`,`merchant_id`,`labels`,`in_stock`)
+
+        values (#{entity.status},#{entity.desc},#{entity.showPictureUrl},#{entity.price},#{entity.merchantId},#{entity.labels,typeHandler = com.campus.dev.handle.LongListTypeHandler},
+        #{entity.inStock})
+
+    </insert>
+
+    <update id="increaseLike">
+        update  set like_num = like_num + 1 <include refid="Table"/> where id = #{id}
+    </update>
+
+    <update id="decreaseLike">
+        update  set like_num = like_num - 1 <include refid="Table"/> where id = #{id}
+    </update>
+
+
+    <update id="increaseComment">
+        update  set comment_num = comment_num + 1 <include refid="Table"/> where id = #{id}
+    </update>
+
+    <update id="decreaseComment">
+        update  set comment_num = comment_num - 1 <include refid="Table"/> where id = #{id}
+    </update>
+
+
+    <update id="update">
+        update  set price = #{entity.price},
+        labels = #{entity.labels,typeHandler = com.campus.dev.handle.LongListTypeHandler},
+        `desc` = #{entity.desc},
+        in_stock = #{entity.inStock},
+        `status` =  #{entity.status}
+        <include refid="Table"/>
+        where id = #{id}
+    </update>
+
+    <select id="findById" resultMap="itemMapper">
+        select <include refid="Base_Column"/> from <include refid="Table"/>
+        where id = #{id}
+    </select>
+</mapper>

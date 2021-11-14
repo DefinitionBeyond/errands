@@ -10,4 +10,6 @@ import java.util.List;
 public interface ItemInfoMapper {
 
     List<ItemInfoDO> findByItemId(@Param("itemId") Long itemId);
+
+    void bulkInsert(List<ItemInfoDO> itemInfoDOS);
 }

@@ -57,7 +57,7 @@ public class SmallMealCardServiceImpl implements SmallMealCardService {
     public ResultListDTO<List<SmallMealCardDO>> list(Map<String, Object> map) {
         Page<SmallMealCardDO> pageHelper = PageHelper.startPage((int) map.get("page"), (int) map.get("size"));
         List<SmallMealCardDO> result = smallMealCardMapper.list(map);
-        return new ResultListDTO<List<SmallMealCardDO>>(result, pageHelper.getTotal());
+        return new ResultListDTO<List<SmallMealCardDO>>(result, pageHelper.getTotal(),pageHelper.getPageNum());
     }
 
     @TransactionalForAll

@@ -4,6 +4,9 @@ import com.campus.dev.model.ItemDO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Map;
+
 @Repository
 public interface ItemMapper {
     void insert(@Param("entity") ItemDO itemDO);
@@ -19,4 +22,7 @@ public interface ItemMapper {
 
     void decreaseComment(@Param("id")long id);
 
+    void update(@Param("entity")ItemDO itemDO);
+
+    List<ItemDO> list(Map<String, Object> searchMap);
 }

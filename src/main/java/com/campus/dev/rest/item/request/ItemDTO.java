@@ -1,6 +1,7 @@
 package com.campus.dev.rest.item.request;
 
 
+import com.campus.dev.model.LabelDO;
 import lombok.*;
 
 import java.util.List;

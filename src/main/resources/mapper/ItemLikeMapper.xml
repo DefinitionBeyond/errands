@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campus.dev.dao.mapper.ItemLikeMapper">
+
+    <resultMap id="ilikeMap" type="com.campus.dev.model.ItemLikeDO">
+        <result property="id" column="id"/>
+        <result property="uid" column="uid"/>
+        <result property="itemId" column="item_id"/>
+    </resultMap>
+
+    <sql id="Table">
+        item_like
+    </sql>
+
+    <sql id="Base_Column">
+        `id`,`uid`,`item_id`
+    </sql>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+
+        insert into
+        <include refid="Table"/>
+        (`uid`,`item_id`)
+
+        values (#{entity.uid},#{entity.itemId})
+
+    </insert>
+
+    <select id="findByUidAndItemid" resultMap="ilikeMap">
+
+        select <include refid="Base_Column"/> from <include refid="Table"/>
+
+        where item_id = #{itemId} and uid = #{uid}
+
+    </select>
+
+
+    <select id="findByUidAndItemids" resultMap="ilikeMap">
+
+        select <include refid="Base_Column"/> from <include refid="Table"/>
+
+        where uid = #{uid} and  item_id in
+         <foreach collection="itemIds" item="itemId" separator="," close=")" open="(">#{itemId}</foreach>
+
+    </select>
+
+    <delete id="deleteById">
+        delete from <include refid="Table"/>
+        where id = #{id}
+    </delete>
+
+</mapper>
